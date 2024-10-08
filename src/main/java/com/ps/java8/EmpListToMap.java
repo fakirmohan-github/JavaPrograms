@@ -15,11 +15,14 @@ public class EmpListToMap {
 
 
         listOfEmps.stream()
-                .collect(Collectors.toMap(Employee::getName, Employee::toString))
-                .forEach((x, y) -> System.out.print(x + "::" + y));
+                .collect(Collectors.toMap(Employee::getName, emp->emp))
+                .forEach((x, y) -> System.out.println(x + "::" + y));
+
+        System.out.println("\n");
 
 
-        Map<String, Object> empMap = listOfEmps.stream().collect(Collectors.toMap(Employee::getName, Employee::toString));
+        Map<String, Object> empMap = listOfEmps.stream()
+                .collect(Collectors.toMap(Employee::getName, Employee::toString));
         System.out.println(empMap);
     }
 }
