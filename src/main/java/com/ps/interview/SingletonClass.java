@@ -6,7 +6,7 @@ public final class SingletonClass {
 
     private SingletonClass(){}
 
-    public static SingletonClass getInstance() {
+    public static  SingletonClass getInstance() {
         synchronized(SingletonClass.class){
             if (obj == null) {
                 return new SingletonClass();
