@@ -7,6 +7,8 @@ public class CharacterOccurance {
         System.out.println(findOccurance(input,c));
     }
     private static long findOccurance(String input, char ch) {
-       return input.chars().filter(c->c==ch).count();
+       return input.chars()
+               .filter(c->c==ch)
+               .count();
     }
 }
