@@ -7,35 +7,22 @@ class Employee1 {
     private Double salary;
 
     private Employee1(){}
-    public String getEmpid() {
-        return empid;
-    }
+
 
     public Employee1 empid(String empid) {
         this.empid = empid;
         return this;
     }
 
-    public String getEmpname() {
-        return empname;
-    }
 
     public Employee1 empname(String empname) {
         this.empname = empname;
         return this;
     }
 
-    public String getDept() {
-        return dept;
-    }
-
     public Employee1 dept(String dept) {
         this.dept = dept;
         return this;
-    }
-
-    public Double getSalary() {
-        return salary;
     }
 
     public Employee1 salary(Double salary) {

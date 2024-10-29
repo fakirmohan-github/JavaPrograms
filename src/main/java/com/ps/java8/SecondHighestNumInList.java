@@ -1,9 +1,6 @@
 package com.ps.java8;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class SecondHighestNumInList {
     public static void main(String[] args) {
