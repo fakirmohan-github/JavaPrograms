@@ -18,7 +18,8 @@ public class SortEmpWithNameAndCity {
         employeeList.add(e3);
 
         employeeList.stream()
-                .sorted(Comparator.comparing(Employee::getName).thenComparing(Employee::getSalary))
+                .sorted(Comparator.comparing(Employee::getName)
+                        .thenComparing(Employee::getSalary))
                 .collect(Collectors.toList())
                 .forEach(System.out::println);
     }
