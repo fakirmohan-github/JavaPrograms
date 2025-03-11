@@ -1,0 +1,147 @@
+
+
+----------------------------------------  SQL Queries ----------------------------------
+
+1. Employees Table
+
+   CREATE TABLE employees (
+   employee_id INT PRIMARY KEY,
+   employee_name VARCHAR(100),
+   hire_date DATE,
+   salary DECIMAL(10, 2),
+   department_id INT,
+   manager_id INT,
+   email VARCHAR(100),
+   job_title VARCHAR(50)
+   );
+
+2. Departments Table
+
+   CREATE TABLE departments (
+   department_id INT PRIMARY KEY,
+   department_name VARCHAR(100)
+   );
+
+3. Salaries Table
+
+   CREATE TABLE salaries (
+   employee_id INT,
+   salary DECIMAL(10, 2),
+   effective_date DATE,
+   PRIMARY KEY (employee_id, effective_date),
+   FOREIGN KEY (employee_id) REFERENCES employees(employee_id)
+   );
+
+4. Projects Table
+
+   CREATE TABLE projects (
+   project_id INT PRIMARY KEY,
+   project_name VARCHAR(100),
+   department_id INT,
+   start_date DATE,
+   end_date DATE,
+   FOREIGN KEY (department_id) REFERENCES departments(department_id)
+   );
+
+------ Queries -----
+
+1. Find the 2nd Highest Salary in a Table SQL Query.
+A. SELECT salary
+   FROM employees
+   ORDER BY salary DESC
+   LIMIT 1 OFFSET 1;
+
+2. List All Employees Who Report to the Same Manager
+A.
+SELECT * from Employees e
+JOIN Employee e1
+ON e.managerId=e1.managerId;
+WHERE e.empId != e1.empId
+
+3. Find All Employees with Salaries Above the Average Salary
+A. select * from Employees e
+where e.salary > (select AVG(salary) from Employees);
+
+4. Find Employees Who Have Worked the Longest at the Company
+A. select e.employee_id,e.employee_name,DATEDIFF(e.CURRENT_DATE,e.hire_date) as tenure
+from Employees e where tenure=(select MAX(DATEDIFF(e.CURRENT_DATE,e.hire_date)) from employees)
+
+5. Find Employees Who Have Worked the Shortest at the Company
+A. select e.employee_id,e.employee_name,DATEDIFF(e.CURRENT_DATE,e.hire_date) as tenure
+from Employees e where tenure=(select MIN(DATEDIFF(e.CURRENT_DATE,e.hire_date)) from employees)
+
+6. Find Departments with No Employees
+A. select d.dept_id, d.dept_name from Departments d
+LEFT JOIN Employees e
+ON e.dept_id == d.dept.id
+where e.dept_id IS NULL
+
+7. Calculate the Average Salary of Employees in Each Department
+A. select dept_id,AVG(salary) from Employees e
+JOIN Department d
+ON e.dept_id=d.dept_id
+GROUP BY dept_id
+
+8. Show Employees Who Are Managers (i.e., Have Subordinates)
+A. select e1.employee_name, e1.employee_id
+from Employees e
+join Empoyees e1
+on e.manager_id=e1.emp_id
+
+9. Find the Employees Who Have Worked on the Most Projects
+A.SELECT employee_id, COUNT(DISTINCT project_id) AS project_count
+  FROM project_assignments
+  GROUP BY employee_id
+  ORDER BY project_count DESC
+  LIMIT 1;
+
+10. Get the Departments with the Highest Average Salary
+
+SELECT d.DepartmentID, d.DepartmentName, AVG(e.Salary) AS AverageSalary
+FROM Departments d
+JOIN Employees e ON d.DepartmentID = e.DepartmentID
+GROUP BY d.DepartmentID, d.DepartmentName
+ORDER BY AverageSalary DESC
+LIMIT 1;
+
+11. Update Employees' Salaries by a Percentage Based on Department e.g Sales Department
+A. update Employees e
+join Department d
+on d.dept_id=e.dept_id
+set e.salary=e.salary+(e.salary*(1/100))
+where d.dept_name='Sales'
+
+12. List Projects that Have Exceeded Their Budget (Hypothetical Table: projects_budget)
+A. SELECT p.project_id, p.project_name, p.budget, SUM(e.salary) AS total_salary_cost
+   FROM projects p
+   JOIN employees e ON p.department_id = e.department_id
+   GROUP BY p.project_id
+   HAVING SUM(e.salary) > p.budget;
+
+13. Get the Employee Who Has Earned the Highest Total Salary (Considering Historical Salaries)
+A. SELECT s.employee_id, SUM(s.salary) AS total_salary
+   FROM salaries s
+   GROUP BY s.employee_id
+   ORDER BY total_salary DESC
+   LIMIT 1;
+
+14. Identify the Managers Who Are Earning More Than Their Subordinates
+A. SELECT m.employee_id, m.employee_name
+   FROM employees m
+   JOIN employees e ON m.employee_id = e.manager_id
+   WHERE m.salary > e.salary;
+
+15. Find All Employees Who Have Been with the Company for More Than 5 Years
+A. SELECT employee_id, employee_name, hire_date
+   FROM employees
+   WHERE hire_date <= CURRENT_DATE - INTERVAL '5' YEAR;
+
+16. Create an Index on Employee Salaries for Faster Lookup
+A. create index emp_sal_index on employee(salary)
+
+17. Add a New Column for Employee Status and Set Default Value
+A. ALTER TABLE employees
+   ADD COLUMN status VARCHAR(20) DEFAULT 'Active';
+
+------------ Concepts --------
+

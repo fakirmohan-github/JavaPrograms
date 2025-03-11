@@ -1,4 +1,6 @@
-package com.ps.designpattern;
+package com.ps.designpattern.singleton;
+
+import com.ps.designpattern.SingletonClass;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

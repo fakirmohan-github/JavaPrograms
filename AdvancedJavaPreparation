@@ -1,0 +1,514 @@
+----------------------------------- JPA and Hibernate -------------------------------
+
+1. Object State Life Cycle in Hibernate.
+A. 3 states of Object we have.
+    1. Transient State -->
+            Any object which is not associated with hibernate session and does not represent a row in the database is considered as transient..
+            It will be garbage collected by JVM,If no other object is referencing it.
+            An object that is created using the new() operator is in transient state.
+            When the object is in transient state then it will not contain any identifier (primary key value).
+            We have to use session methods like save, persist or saveOrUpdate methods to persist the transient object.
+    2. Persistent -->
+            An object that is associated with the hibernate session is called as Persistent object.
+            When an object is in a persistent state, Hibernate is totally aware of it.
+            It also represents one row of the database and consists of an identifier value.
+            We can make a transient instance persistent by associating it with a Session like below
+
+            Object can get the Persistent state in the below 2 scenarios
+            1) Load the object from the Database using Hibernate API
+            In this case, we load the existing object from the database and it will be automatically associated with the session.
+            2) Save the object into the database using Hibernate API
+            In this case new transient object created using “new” operator will be attached to the session and it becomes Persistent object.
+
+    3. Detached state --->
+            The detached state is given to an object that was previously “attached” to the Session (persistent state) but has now left the association with the Session.
+            e.g Session.close();
+            All the persistent objects within the Session will get the detached state when we close the session.
+            If we would have done transaction commit before closing the Session then all Persistent objects will be saved into Database otherwise those persistent objects will be lost.
+    4. Remove State -->
+
+2. what is Named Query and its benefit ?
+A.
+In Hibernate, a Named Query is a pre-defined query that is given a name and can be referenced and executed multiple times.
+Named Queries help in improving performance and avoiding repetition, especially for complex queries.
+They are defined either in the Hibernate mapping files or in the Java code using annotations.
+Named Queries are generally used to encapsulate SQL or HQL (Hibernate Query Language) queries that are frequently used throughout an application.
+By using Named Queries, you can centralize and manage them in one place, improving maintainability and performance.
+
+Advantages of Named Queries:
+Performance Optimization: Hibernate can cache and optimize named queries, which can improve the performance of frequently used queries.
+Reusability: You can reuse a named query wherever required without redefining it every time.
+Separation of Concerns: It keeps your query logic separate from the business logic, improving maintainability and readability.
+Safety: Since the query is pre-defined, you are less likely to make mistakes in the query string.
+
+3. How we can create session in Hibernate ?
+A. op
+
+4. SessionFactory vs EntityManager
+A.
+SessionFactory is Hibernate's own component, used for managing database interactions directly in the Hibernate world.
+It's more flexible and provides low-level control over session and transaction management but is not portable across different persistence providers.
+
+EntityManager is part of the JPA specification, providing a higher-level abstraction that is portable across various JPA providers (like Hibernate, EclipseLink, etc.).
+It's ideal for standardized, easier-to-maintain, and container-managed persistence contexts.
+
+
+5. get() vs Load() in Hibernate.
+A.
+Get
+    Eager Loading. Hit the DB if not found in 1st level cache.
+    If data not found the it return null.
+Load
+    Lazy Loading. Don't hit the DB. when the method of Obj is called the it Hit DB.
+    It improved performance as DB hit less
+    If Obj is not present then it thrown ObjectNotFound exception.
+
+
+Architechture of Hibernate
+
+
+How to get authorization for our application.
+
+Different Ways
+1. LDAP Authentication
+2. JWT Tokenbased
+3. Oauth
+
+
+6. DataBase Traffic Handle. What are the failover mechanism.
+A.Hikary
+
+
+7. Transaction management and Propogation and Isolation Level
+
+8.Multi Data Source
+A. Same Database with multiple scemas or multiple Database
+
+9. Cascade Type - along with Use case. where to use what Cascade Type
+
+10. @JoinColumn use cases
+A. New Column will be created for the relational mapping table
+
+11. @JoinTable use cases.
+A. new table is created for mapping in @manyToMany relationship.
+
+11. Normalization Rules
+
+12. Composite Primary Key, EmbeddedId, Embedable
+A. create a class e.g BookId that should be implemented from Serializable. Put @Embedable in the class level.
+put all the columns that you want to get combined to make composite key. put @Id for all the columns you want for complosite key.
+In the main entity class. Use @EmebededId for BookId. e.g
+@EmbededId
+BookId bookid;
+
+13.
+------------------------------------------  Spring ----------------------------------------------
+
+1. Spring Transaction management Internal Working
+A.
+@Transactional -- its internal working
+when the block starts executing it acquire the lock for all the resources used in the trasactiona block.
+A transaction log is created for the @transactional block. If all the statements are executed successfully
+then it commit the data. and release the lock. If any error occured then system roll back and udo all the
+changes that done by the statement.
+
+To do so Transional it uses Transaction manager, Locking, ACID Property etc.
+
+Normalization
+
+Eager
+
+2. Constructor Injection vs Setter Injection vs Field Injection
+A. If XML based configuration then for constructor injectipn we should use construcor-arg tag in inside bean id.
+For Setter injection we should use <property> tag for the attriibute initializaton inside <bean> tag in configuration xml file.
+And to use in java file we have to
+
+
+3. idempotency
+A. PUT is idempotent as it does not create multiple object if same request is calling multiple times.
+
+
+3.1. PUT vs POST
+A. PUT is idempotent but POST is NOT.
+POST: You use POST when you are submitting a form to create something new, like creating a new blog post or a new user account.
+PUT: You use PUT when you want to update something that already exists, like updating your profile information or changing the content of an existing blog post.
+
+4. what Request and Response obj contains other than content.
+A.
+
+5. Spring Life Cycle.
+A. request ---goes to ---> servlet container------(analize the request and create skeleton obj for req and response and create thread for each request and send to Servlet)--->send to aprropriate Servlet
+-----> Do the business Logic and sent back the response
+
+6. Role of Servlet Container
+1. communication suppport
+2.
+3. multithreading
+
+
+7. class path for spring project is always --> src/main/java
+
+8. Key Differences between BeanFactory and ApplicationContext
+A. IOC Container is the core concept in Spring, responsible for managing beans.
+   ApplicationContext is a more advanced version of the IOC Container, offering additional enterprise features like event handling, internationalization, AOP, etc.
+
+    Feature	BeanFactory	ApplicationContext
+   Basic Interface	Provides basic IOC functionality.	Extends BeanFactory and adds enterprise features.
+   Startup	Beans are created lazily (on-demand).	Beans are typically created eagerly (at context startup).
+   Internationalization	No built-in support for message resources.	Supports internationalization (i18n) with MessageSource.
+   Event Propagation	No support for event handling.	Supports event propagation via ApplicationEventPublisher.
+   AOP Integration	No direct support for AOP.	Supports Aspect-Oriented Programming (AOP) integration.
+   Bean Post Processors	Limited support.	Supports BeanPostProcessor to modify beans during initialization.
+
+
+9. Bean Scope in Spring.(do programs )   --(bean scope - singletom/prototype)
+A.
+   1. Singleton
+   2. prototype
+   3. request
+   4. session
+
+10. Types of Autowire
+A. Mainly its 2 types. byName and byType. by Default its ByType.
+
+11. @Primary vs @Qulifier  (CAR  -- AUdi and BMD)
+A. @Primary -- defines one common bean for the implemented clsses.
+
+12. @DependsOn Annotation
+A.
+
+13. @Value we can use at property level as well as in the parameter level too. If w use then corresponding
+variable will have default value defined in @Value.
+
+14. what id Profiling and how we can active particular profile
+A. spring.profile.active ="write-correct-profile"
+
+15. Spring Bean Life Cycle
+A. Read Configuration File --> Set the Properties of the Bean --> Calling setBeanName() (eaach bean will get unique name)
+--> setBeanFactory() or setApplicationContext()  --> postProcessBeforeInitialization() (write anything if we want anything b4 bean creatiomn)--
+--> afterPropertiesSet() --Custom init method --> postProcesserafterInitialization
+
+Spring Destroy
+
+Spring container shut down --> destroy() -->
+
+
+Using Annotation
+
+@PreDestroy
+
+@PostConstruct
+
+16. What is profiling and what are different types of profile in Spring ?
+A.Profiling in the Spring Framework refers to the ability to conditionally configure or load beans and components depending on the environment or context in which the application is running. It allows you to define different configurations for different environments, such as development, testing, and production, so your application can adapt to each environment accordingly.
+
+17. Type Erager
+A. Generics
+
+18. Generic Method vs Generic Type
+A. Generic Method: A method that has its own type parameter. This allows the method to operate on objects of different types. The type parameter is defined at the method level.
+   Example: public <T> void print(T item)
+
+   Generic Type: A class or interface that works with a generic type. The type parameter is defined at the class or interface level and is shared by all methods and members of the class.
+   Example: public class Box<T> { ... }
+
+
+19. Spring Work Flow
+A. User ----> front controller/dispather servlet ---delegates--> controller ---> data server
+        <----             view template                       <--                        <---
+
+20. dispatcher servlet is configured in the web.xml file(web-app--> servlet-->servlet-class) in Spring project.
+And in Spring-boot its auto configured.
+
+21. In Spring MVC, View Resolver to set up in web.xml file to support jsp pages and to support return type in the controller.
+
+22. tomcat-embed-jasper ---> This is the starter dependecny to support jsp pages in springboot
+
+23. @SpringbootApplication --> @Configuration + @ComponentScan + @EnableAutoConfiguration
+
+24. Microservice Project Advatages
+A.
+1. continuous integration and continous
+
+25. Feign CLient vs Rest Template/Web Client
+A.
+Feature	Feign Client	Rest Client (RestTemplate / WebClient)
+Abstraction Level	High (Declarative)	Low (Imperative, manual control)
+Integration with Spring Cloud	Seamless, integrates with Eureka, Ribbon, Hystrix	Limited, requires additional configuration
+Declarative vs Imperative	Declarative, easy to use	Imperative, requires more coding for configuration
+Error Handling	Automatically handled or fallback via circuit breakers	Needs manual error handling
+Service Discovery	Supports load balancing and service discovery with Spring Cloud	Needs manual configuration for load balancing
+Customization	Less customizable (abstracts much of HTTP)	Highly customizable (full control over HTTP request)
+Reactive Support	Not reactive (based on blocking calls)	WebClient is non-blocking, reactive (preferred for reactive apps)
+Use Case	Ideal for simple, declarative inter-service communication	Ideal for fine-grained control and custom requirements
+
+When to Use Feign Client:
+
+When you want a simplified, declarative HTTP client for communicating with other microservices in a Spring Cloud environment.
+When you need automatic load balancing, service discovery, and circuit breakers integrated seamlessly.
+If your microservices architecture is built around Spring Boot and Spring Cloud.
+
+When to Use Rest Client:
+
+When you need more customization and control over HTTP requests and responses.
+If you are not using Spring Cloud or need to implement advanced configurations like custom headers, authentication, or error handling.
+If you are building a reactive application with WebClient or need low-level handling of HTTP transactions.
+
+
+26. Transaction Management in Spring Batch.
+A. Resfer SpringBatch from JavaTechOnline
+
+27.
+
+---------------------------------------------   System Design -------------------------------------
+1. CAP THeorm
+
+2. Horizontal Scaling vs Vertical Scaling
+A. Horizonlal Scaling --> No of Machine increased
+Vertical Scaling --> Same Machine but increase the capacity like RAM size , capacity
+
+3. Limitation of Horizontal and Vertical Scaling.
+A.
+
+4. Load Balancing and types of Load Balancing.
+A. Software Level and hardware level
+
+5. Throughput
+A.
+
+6. Database Partitioning
+A.
+
+7. When to use SQL and NOSQL ?
+A.
+
+8. CDN (Content Delivery Network)
+A.
+
+9.Clustering
+A.
+
+
+LinkedIn System Design
+
+Before developng an application we should have some crietira. like
+
+    1. What is the requirement for the applicatiom.
+    2. What should system do. what will be the behaviour.
+    3. what are the basic requirement develop that and develop in such a way that it can enhanced.
+
+
+step-1 -- Requirements :
+-----------------------
+1. Each Member should be able to add info about their basic profile , exp, skills, etc.
+2. Any member should able to search another member or complanies
+3. Member should able to serach send and accept connections request.
+4. Any memebr should be able to request a recoomendation from other member.
+5. Show basic stats : about profile like number of profile views, total number of connections, search apperances
+6. Create new post and share with connections
+7. Add comments to post , like share.
+8. Send notification to memeber.
+9. Send message to other memeber.
+10. create page for the company job posting.
+11. create group and join any group.
+12. Follow the members.
+etc.
+
+Step-2 --- Use Case Diagram
+---------------------------
+Understand the users/actors for the application.
+
+Three main actors in this
+
+1. Member   --> Users
+2. Admin    --> Blocking and Unblocking post/people
+3. System   --> send aurtomatic notification
+
+
+Step-3 Write Use Cases
+---------------
+1. Add,Update Profile
+2. Search
+3. Follow/ UnFollow
+4. Send Messages
+5. Create Post
+6. Send Notification
+etc
+
+Actor will use the Use Cases.
+
+Step - 4 Create UseCase Diagram
+-------------------------------
+use https://app.diagrams.net/
+
+
+Step-4 Create Class Diagram
+---------------------------
+https://app.diagrams.net/
+
+Step-5 Create Activity Diagram
+-------------------------------
+https://app.diagrams.net/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -29,7 +29,6 @@ public class TwoSum {
                 right--;  // Move right pointer to the left to decrease the sum
             }
         }
-
         return null;  // No pair found
     }
 }

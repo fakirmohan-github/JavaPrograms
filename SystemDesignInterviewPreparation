@@ -1,0 +1,34 @@
+1. How fast our application will work. Performance Tuning of our application.
+2. Database Design
+3. Cloud
+4. UML Diagram -- DDL DML diagram
+
+--- Pre Requisite for Core Java --
+
+Collection
+MultiThreading
+Concurrency
+OOPS Design - SOLID Principle
+JVM Memory Management
+Garbage Collection
+Performance Tuning -- Tools
+
+
+------ Pre Req for Adv Java --
+
+Query Optimization
+Mapping
+Caching
+
+
+----
+
+---- Custom Logging COnfiguration --
+
+By default logging is slf4j in Springboot. we have to exclude slf4j and include log4j if we want to use log4j instead of slf4j.
+
+
+Algorithm used for password encryption.
+
+
+
