@@ -7,5 +7,5 @@ public class FindX {
             x+=x;
         }
         System.out.println(x);
-    }
+     }
 }
