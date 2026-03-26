@@ -1,0 +1,41 @@
+--------- top 3 highest-paid employees per department ---------------
+
+----------------------- Using ROW NUM -------------------------------
+
+SELECT emp_id, name, salary, dept_id
+FROM (
+    SELECT
+        emp_id,
+        name,
+        salary,
+        dept_id,
+        ROW_NUMBER() OVER (PARTITION BY dept_id ORDER BY salary DESC) AS rn
+    FROM Employee
+) t
+WHERE rn <= 3;
+
+
+
+----------------------- Using Dense Rank -----------------------------
+
+SELECT emp_id, name, salary, dept_id
+FROM (
+    SELECT
+        emp_id,
+        name,
+        salary,
+        dept_id,
+        DENSE_RANK() OVER (PARTITION BY dept_id ORDER BY salary DESC) AS rnk
+    FROM Employee
+) t
+WHERE rnk <= 3;
+
+
+-------------------- Explanation ------------------------------------
+
+PARTITION BY dept_id → separates each department
+ORDER BY salary DESC → ranks highest salary first
+ROW_NUMBER() → assigns rank per department
+rn <= 3 → picks top 3
+
+----------------------------------------------------------------------
